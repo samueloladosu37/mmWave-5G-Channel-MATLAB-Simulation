@@ -1,0 +1,9 @@
+angles = linspace(0,pi/2,300); %generate 300 linearly equally spaced angles between 0 and 90
+MF_estimator = zeros(300,1); %initialize the cost function
+for j=1:300
+a = exp(1i*2*pi*d*sin(angles(j))/(lambda_c)*(0:M-1)).'; %evaluate the steering vector at each
+angle
+MF_estimator(j) = sum(abs(a'*y)); %compute the product over all subcarriers
+end
+[max,index] = max(MF_estimator); %find the maximum
+theta_UE = angles(index); %select angle associated to the maximum
