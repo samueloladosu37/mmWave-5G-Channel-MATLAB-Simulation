@@ -1,0 +1,13 @@
+%Precoding matrix F
+rays = ones(M,S);
+angles = 2*pi*rand(M,S);
+F = rays.*exp(1i*angles); %elements of analog beamformer
+generated as random phases
+F = F/norm(F,'fro'); %normalization to have unit power
+desired_directions = [10*pi/180 pi/6 60*pi/180]; %10, 30 and 60 degrees
+F = [];
+for i=1:S
+F = [F exp(1i*2*pi*d*sin(desired_directions(i))/(lambda_c)*(0:M-1)).'];
+end
+
+F = F/norm(F,'fro');
