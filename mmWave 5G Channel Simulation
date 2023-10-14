@@ -1,0 +1,52 @@
+%General System Parameters
+fc = 28e9; %28 GHz carrier frequency
+B = 40e6; %40 MHz bandwidth
+SCS = 15e3; %15 kHz Subcarrier Spacing
+c = 3e8; %speed of light
+T_s = 1/B; %sampling period
+N = floor(B/SCS); %Number of subcarriers
+M = 10; %number of transmitting antennas
+S = M; %number of transmitted symbols
+lambda_c=c/fc; % carrier wavelength
+d = lambda_c/2; %inter-element spacing
+
+%Thermal noise parameters
+kboltz = 1.38054e-23;
+Tkelvin = 290;
+N0 = kboltz*Tkelvin*B; %noise variance
+%Positions of nodes
+BS_pos = [0 0]; %Position of 5G BS
+UE_pos = [3 5]; %Position of UE
+%Geometric Channel Parameters
+theta = atan2(UE_pos(2),UE_pos(1));
+tau = norm(UE_pos)/c;
+
+%Precoding matrix F
+rays = ones(M,S);
+angles = 2*pi*rand(M,S);
+F = rays.*exp(1i*angles); %elements of analog beamformer
+generated as random phases
+F = F/norm(F,'fro'); %normalization to have unit power
+%Set complex channel gain according to a given SNR
+SNR = 5; %SNR in dB
+Pr = SNR + 10*log10(N0); %Received power in dB
+alpha = sqrt(10^(Pr/10)); %channel gain (real for simplicity)
+
+  %Received signal initialization
+y = zeros(N,1);
+for n=1:N %for cycle over each subcarrier
+
+% I) generate the symbols
+x_n = ones(S,1); %for simplicity, all symbols equal to 1
+  
+% II) generate the transmitted signal
+s_n = F*x_n; %apply precoding matrix F
+
+% III) generate the mmWave DL channel
+a = exp(1i*2*pi*d*sin(theta)/(lambda_c)*(0:M-1)).';
+h_T = alpha*exp((-1i*2*pi*n*tau)/(N*T_s))*a';
+% IV) generate the received signal
+noise = sqrt(N0)*(sqrt(1/2)*(randn(1,1)+sqrt(-1)*randn(1,1)));
+%generate random Gaussian (complex) noise
+y(n) = h_T*s_n + noise;
+end;
