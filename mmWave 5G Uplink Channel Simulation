@@ -1,0 +1,15 @@
+%Received signal initialization
+y = zeros(M,N);
+for n=1:N %for cycle over each subcarrier
+
+% I) generate the symbols
+x_n = 1; %for simplicity, we choose all symbols equal to 1
+
+% II) generate the mmWave UL channel
+a = exp(1i*2*pi*d*sin(theta)/(lambda_c)*(0:M-1)).';
+h = alpha*exp((-1i*2*pi*n*tau)/(N*T_s))*a;
+% III) generate the received signal
+noise = sqrt(N0)*(sqrt(1/2)*(randn(M,1)+sqrt(-1)*randn(M,1)));
+%generate random Gaussian (complex) noise
+y(:,n) = h*x_n + noise;
+end
