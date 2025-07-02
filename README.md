@@ -25,7 +25,8 @@ This repository contains MATLAB implementations for simulating **5G millimeter-w
 ```plaintext
 mmWave-5G-Channel-Simulation/
 ├── AOA_Estimation.m             # MATLAB script for Angle of Arrival estimation
+├── README.md
 ├── Transmit_Beamforming.m       # Beamforming simulation and visualization
 ├── Uplink_Channel_Sim.m         # mmWave uplink channel simulation
-├── Downlink_Channel_Sim.m       # mmWave downlink channel simulation
-└── README.md
+└── Downlink_Channel_Sim.m       # mmWave downlink channel simulation
+
